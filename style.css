@@ -1,17 +1,19 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
-nav{
+
+nav {
     display: flex;
     flex-direction: row-reverse;
     max-width: 100vw;
-    height:100px;
+    height: 100px;
     background-color: #00ff0060;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
-#sets{
+
+#sets {
     z-index: 1;
     display: flex;
     flex-direction: column;
@@ -24,53 +26,64 @@ nav{
     color: aliceblue;
     background-color: #101010;
 }
-#setheader{
+
+#setheader {
     margin-top: 15%;
-     background: none;
-  border: none;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
 }
-#setbody{
+
+#setbody {
     display: none;
     flex-direction: column;
 }
-#setbody > button{
-    
+
+#setbody>button {
+
     margin-left: 5%;
     margin-right: 5%;
     height: 30px;
     width: 200px;
 }
-#sets:hover{
+
+#sets:hover,#sets:focus-within {
     height: fit-content;
 }
-#sets:hover #setbody{
+
+#sets:hover #setbody,#sets:focus-within #setbody {
     display: flex;
 }
-body{
+
+body {
     background-color: #101010;
     max-width: 100vw;
     align-items: center;
 }
-main{
+
+main {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
 }
-main > div{
+
+main>div {
+    flex: 1 1 240px;
+    min-width: 0;
+    max-width: 320px;
+    overflow-wrap: anywhere;
     color: aliceblue;
     padding: 10px;
     margin: 10px;
     background-color: #202020;
-    min-width: 17vw;
-    max-width: 17vw;
     min-height: 200px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: 90%;
 }
+
 .artifact[hidden] {
-  display: none;
+    display: none;
 }

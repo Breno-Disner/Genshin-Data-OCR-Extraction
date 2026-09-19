@@ -46,7 +46,6 @@ for (const sets of Object.values(data)) {
 
 displayArtifacts(data);
         rawdata = data
-        console.log(rawdata)
         displayArtifacts(data)
     })
     .catch(error => console.error('Unable to fetch data:', error));
