@@ -10,40 +10,6 @@ fetch('./data.json')
     return response.json();
   })
   .then(data => {
-    const samples = [
-      {
-        slot: "flower",
-        level: 0,
-        mainstat: { hp: 717 },
-        substats: { "atk%": 5.8, "crit-dmg%": 7.8, def: 23 }
-      },
-      {
-        slot: "plume",
-        level: 4,
-        mainstat: { atk: 100 },
-        substats: {
-          "crit-rate%": 3.9,
-          "crit-dmg%": 7.8,
-          "energy-recharge%": 5.2,
-          hp: 209
-        }
-      },
-      {
-        slot: "goblet",
-        level: 0,
-        mainstat: { "cryo-dmg%": 7 },
-        substats: { "atk%": 4.7, "crit-rate%": 3.1 }
-      }
-    ];
-
-    for (const sets of Object.values(data)) {
-      for (const artifacts of Object.values(sets)) {
-        for (const [index, sample] of samples.entries()) {
-          artifacts[`demo-${index + 1}`] = structuredClone(sample);
-        }
-      }
-    }
-
     displayArtifacts(data);
     rawdata = data
     createSetButtons(data)
