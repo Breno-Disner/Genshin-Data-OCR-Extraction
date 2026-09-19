@@ -182,8 +182,7 @@ async function readArtifact(image, worker) {
 
     return results;
   } catch (error) {
-    console.error(error);
-    return null;
+    throw error;
   }
 }
 async function main() {
@@ -233,11 +232,15 @@ async function main() {
 
   const summary = await saveInventory(batch, catalog, outputPath);
 
+  if (summary.written) {
   console.log(`Saved ${summary.saved} artifacts to ${outputPath}`);
+} else {
+  console.log('Inventory unchanged: scan was empty or incomplete.');
+}
 
-  if (summary.skipped.length > 0) {
-    console.table(summary.skipped);
-  }
+if (summary.skipped.length > 0) {
+  console.table(summary.skipped);
+}
   return batch;
 }
 async function countStars(image, rectangle) {
