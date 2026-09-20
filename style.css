@@ -161,6 +161,50 @@ main>div {
   border-radius: 8px;
   cursor: pointer;
 }
+#scan-controls {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+
+  width: min(460px, 85%);
+  display: grid;
+  grid-template-rows: 46px 72px;
+  gap: 10px;
+  justify-items: center;
+}
+
+#scan-images {
+  width: 180px;
+  height: 46px;
+  border: 1px solid #555;
+  border-radius: 10px;
+  background: #202020;
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+#scan-images:hover:not(:disabled) {
+  background: #353535;
+}
+
+#scan-images:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+#scan-status {
+  width: 100%;
+  height: 72px;
+  margin: 0;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  text-align: center;
+  line-height: 1.4;
+  color: #101010;
+}
 .artifact[hidden] {
     display: none;
 }

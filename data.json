@@ -59,41 +59,13 @@
     "vermillion-hereafter": {},
     "viridescent-venerer": {},
     "vourukashas-glow": {},
-    "wanderers-troupe": {
-      "1": {
-        "slot": "sands",
-        "level": 20,
-        "mainstat": {
-          "atk%": 46.6
-        },
-        "substats": {
-          "hp": 478,
-          "hp%": 9.9,
-          "crit-dmg%": 14,
-          "elemental-mastery": 56
-        }
-      }
-    }
+    "wanderers-troupe": {}
   },
   "four-stars": {
     "a-day-carved-from-rising-winds": {},
     "archaic-petra": {},
     "aubade-of-morningstar-and-moon": {},
-    "berserker": {
-      "1": {
-        "slot": "plume",
-        "level": 14,
-        "mainstat": {
-          "atk": 209
-        },
-        "substats": {
-          "def%": 5.8,
-          "energy-recharge%": 8.8,
-          "atk%": 3.3,
-          "crit-rate%": 5.6
-        }
-      }
-    },
+    "berserker": {},
     "blizzard-strayer": {},
     "bloodstained-chivalry": {},
     "brave-heart": {},
@@ -168,41 +140,7 @@
     "scholar": {},
     "the-exile": {},
     "tiny-miracle": {},
-    "traveling-doctor": {
-      "1": {
-        "slot": "goblet",
-        "level": 10,
-        "mainstat": {
-          "hp%": 20.1
-        },
-        "substats": {
-          "hp": 100,
-          "crit-rate%": 2.1,
-          "atk": 7
-        }
-      },
-      "2": {
-        "slot": "flower",
-        "level": 4,
-        "mainstat": {
-          "hp": 918
-        },
-        "substats": {
-          "def%": 3.1,
-          "elemental-mastery": 10
-        }
-      },
-      "3": {
-        "slot": "circlet",
-        "level": 1,
-        "mainstat": {
-          "atk%": 6.7
-        },
-        "substats": {
-          "hp": 143
-        }
-      }
-    }
+    "traveling-doctor": {}
   },
   "two-stars": {
     "adventurer": {},
