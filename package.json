@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Breno-Disner/Genshin-Data-OCR-Extraction#readme",
   "dependencies": {
+    "express": "^5.2.1",
+    "multer": "^2.4.0",
     "sharp": "^0.35.4",
     "tesseract.js": "^7.0.0"
   }

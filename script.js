@@ -1,6 +1,5 @@
-//const { createElement } = require("react");
-
 let rawdata = null
+
 
 fetch('./data.json')
   .then(response => {
@@ -103,3 +102,13 @@ function filterArtifacts(selectedSet) {
     card.hidden = !matches;
   });
 }
+
+document.querySelector('#image_trigger').addEventListener('click', e =>{
+  const selectorpage = document.getElementById("file_selector")
+  if (fileselectoropen === false){
+    selectorpage.style.display = "flex"
+  }
+  else{
+    selectorpage.style.display = "none"
+  }
+});
