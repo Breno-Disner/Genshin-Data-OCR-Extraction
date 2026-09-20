@@ -13,7 +13,7 @@
         <div id="send_images"><button id="image_trigger">Send Images</button></div>
         <div id="sets">
             <button id="setheader" type="button">ALL Sets</button>
-            
+
             <div id="setbody" class="hide-scrollbar">
                 <button type="button" data-set="all">All Sets</button>
             </div>
@@ -21,10 +21,16 @@
     </nav>
     <main></main>
     <div id="file_selector">
-        <label id="drop-zone"><input  type="file" id="file-input" multiple accept="image/*" aria-label="Select artifact screenshots" /></label>
+        <label id="drop-zone"><input type="file" id="file-input" multiple accept="image/*"
+                aria-label="Select artifact screenshots" /></label>
+        <div id="scan-controls">
+            <button type="button" id="scan-images">Scan images</button>
+            <p id="scan-status" role="status" aria-live="polite"></p>
+        </div>
         <button type="button" id="cancel-file-selection">CANCEL</button>
     </div>
 </body>
 <script src="script.js" defer></script>
 <script src="src/get_images.js" defer></script>
+
 </html>

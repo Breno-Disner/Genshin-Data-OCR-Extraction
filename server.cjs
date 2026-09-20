@@ -4,6 +4,7 @@ const sharp = require('sharp');
 const path = require('node:path');
 const { mkdir, writeFile } = require('node:fs/promises');
 const { createHash } = require('node:crypto');
+const { spawn } = require('node:child_process');
 
 
 const app = express();
@@ -107,7 +108,56 @@ app.post('/api/images', upload.single('image'), async (req, res, next) => {
     next(error);
   }
 });
+let scanRunning = false;
 
+app.post('/api/scan', (req, res) => {
+  if (scanRunning) {
+    return res.status(409).json({
+      error: 'A scan is already running.'
+    });
+  }
+
+  scanRunning = true;
+
+  const reader = spawn(
+    process.execPath,
+    [path.join(__dirname, 'ocr', 'Reader', 'test.cjs')],
+    { cwd: __dirname }
+  );
+
+  reader.stdout.on('data', chunk => {
+    process.stdout.write(chunk);
+  });
+
+  reader.stderr.on('data', chunk => {
+    process.stderr.write(chunk);
+  });
+
+  reader.on('error', error => {
+    scanRunning = false;
+    console.error(error);
+
+    if (!res.headersSent) {
+      res.status(500).json({
+        error: 'Could not start the OCR reader.'
+      });
+    }
+  });
+
+  reader.on('close', code => {
+    scanRunning = false;
+
+    if (res.headersSent) return;
+
+    if (code !== 0) {
+      return res.status(500).json({
+        error: 'Scan failed. Check the server terminal for details.'
+      });
+    }
+
+    res.json({ message: 'Scan complete. Inventory updated.' });
+  });
+});
 app.use((error, req, res, next) => {
   if (error instanceof multer.MulterError) {
     return res.status(400).json({

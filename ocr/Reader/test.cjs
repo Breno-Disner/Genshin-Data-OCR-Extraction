@@ -1,4 +1,4 @@
-const { readFile, readdir } = require('node:fs/promises');
+const { readFile, readdir, mkdir, rename } = require('node:fs/promises');
 const { createWorker, PSM } = require('tesseract.js');
 const sharp = require('sharp');
 const path = require('node:path');
@@ -197,8 +197,7 @@ async function main() {
     .sort();
 
   if (files.length === 0) {
-    console.log('No images found.');
-    return;
+    throw new Error('No images found. Upload screenshots first.');
   }
 
   const worker = await createWorker('eng');
@@ -231,16 +230,34 @@ async function main() {
   const outputPath = path.join(__dirname, '../../data.json');
 
   const summary = await saveInventory(batch, catalog, outputPath);
+  
+  if (summary.skipped.length > 0) {
+    const rejectedFolder = path.join(__dirname, 'rejected');
+    await mkdir(rejectedFolder, { recursive: true });
 
+    for (const { filename, reason } of summary.skipped) {
+      const source = path.join(folder, filename);
+      const destination = path.join(
+        rejectedFolder,
+        `${require('node:crypto').randomUUID()}-${filename}`
+      );
+
+      await rename(source, destination);
+      console.warn(`Moved ${filename} to rejected: ${reason}`);
+    }
+  }
   if (summary.written) {
-  console.log(`Saved ${summary.saved} artifacts to ${outputPath}`);
-} else {
-  console.log('Inventory unchanged: scan was empty or incomplete.');
-}
+    console.log(`Saved ${summary.saved} artifacts to ${outputPath}`);
+  } else {
+    console.log('Inventory unchanged: scan was empty or incomplete.');
+  }
 
-if (summary.skipped.length > 0) {
-  console.table(summary.skipped);
-}
+  if (summary.skipped.length > 0) {
+    console.table(summary.skipped);
+  }
+  if (!summary.written) {
+    throw new Error('Scan incomplete. Inventory was not updated.');
+  }
   return batch;
 }
 async function countStars(image, rectangle) {
@@ -329,4 +346,7 @@ function parseSubstats(text) {
   return { stats, unparsed };
 }
 
-main().catch(console.error);
+main().catch(error => {
+  console.error(error);
+  process.exitCode = 1;
+});
