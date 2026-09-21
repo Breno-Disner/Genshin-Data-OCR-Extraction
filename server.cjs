@@ -6,48 +6,42 @@ const { mkdir, writeFile } = require('node:fs/promises');
 const { createHash } = require('node:crypto');
 const { spawn } = require('node:child_process');
 
-
 const app = express();
+
+const publicFolder = path.join(__dirname, 'public');
+const imageFolder = path.join(__dirname, 'ocr', 'Reader', 'images');
+const readerFile = path.join(__dirname, 'ocr', 'Reader', 'test.cjs');
+
+let scanRunning = false;
+
+// Request logging.
 app.use((req, res, next) => {
   console.log('REQUEST:', req.method, req.originalUrl);
   res.setHeader('X-Genshin-Server', 'ocr-upload');
   next();
 });
-const imageFolder = path.join(__dirname, 'ocr', 'Reader', 'images');
+
+// Serves index.html, CSS, browser JS, Assets, and data.json.
+app.use(express.static(publicFolder));
+
+// Serve the shared Assets folder.
+app.use('/Assets', express.static(path.join(__dirname, 'Assets')));
 
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 15 * 1024 * 1024, // 15 MB per image
+    fileSize: 15 * 1024 * 1024,
     files: 1
   }
 });
 
-// Serve only frontend files, not the entire project.
-const frontendFiles = [
-  'index.html',
-  'style.css',
-  'script.js',
-  'src/get_images.js', // Use your actual new frontend JS filename here.
-  'data.json'
-];
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-for (const filename of frontendFiles) {
-  app.get(`/${filename}`, (req, res) => {
-    res.sendFile(path.join(__dirname, filename));
-  });
-}
-
-app.use('/Assets', express.static(path.join(__dirname, 'Assets')));
-
+// Validate and save an uploaded screenshot.
 app.post('/api/images', upload.single('image'), async (req, res, next) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: 'No image received.' });
+      return res.status(400).json({
+        error: 'No image received.'
+      });
     }
 
     let png;
@@ -77,7 +71,6 @@ app.post('/api/images', upload.single('image'), async (req, res, next) => {
         });
       }
 
-      // Decode fully and save in a consistent format.
       png = await image.png().toBuffer();
     } catch {
       return res.status(400).json({
@@ -87,7 +80,6 @@ app.post('/api/images', upload.single('image'), async (req, res, next) => {
 
     await mkdir(imageFolder, { recursive: true });
 
-    // Identical PNG output gets the same filename.
     const hash = createHash('sha256').update(png).digest('hex');
     const filename = `${hash}.png`;
 
@@ -103,13 +95,16 @@ app.post('/api/images', upload.single('image'), async (req, res, next) => {
       throw error;
     }
 
-    res.status(201).json({ filename, duplicate: false });
+    return res.status(201).json({
+      filename,
+      duplicate: false
+    });
   } catch (error) {
     next(error);
   }
 });
-let scanRunning = false;
 
+// Run the OCR reader.
 app.post('/api/scan', (req, res) => {
   if (scanRunning) {
     return res.status(409).json({
@@ -121,7 +116,7 @@ app.post('/api/scan', (req, res) => {
 
   const reader = spawn(
     process.execPath,
-    [path.join(__dirname, 'ocr', 'Reader', 'test.cjs')],
+    [readerFile],
     { cwd: __dirname }
   );
 
@@ -134,7 +129,6 @@ app.post('/api/scan', (req, res) => {
   });
 
   reader.on('error', error => {
-    scanRunning = false;
     console.error(error);
 
     if (!res.headersSent) {
@@ -155,10 +149,18 @@ app.post('/api/scan', (req, res) => {
       });
     }
 
-    res.json({ message: 'Scan complete. Inventory updated.' });
+    return res.json({
+      message: 'Scan complete. Inventory updated.'
+    });
   });
 });
+
+// Error handling goes after the routes.
 app.use((error, req, res, next) => {
+  if (res.headersSent) {
+    return next(error);
+  }
+
   if (error instanceof multer.MulterError) {
     return res.status(400).json({
       error: error.code === 'LIMIT_FILE_SIZE'
@@ -168,14 +170,18 @@ app.use((error, req, res, next) => {
   }
 
   console.error(error);
-  res.status(500).json({ error: 'Could not save the image.' });
+
+  return res.status(500).json({
+    error: 'The server could not complete the request.'
+  });
 });
 
 console.log('Starting server file:', __filename);
+
 const server = app.listen(3001, '127.0.0.1', () => {
   console.log('Open http://127.0.0.1:3001');
 });
 
 server.on('error', error => {
-    console.error('Server failed to start:', error);
+  console.error('Server failed to start:', error);
 });

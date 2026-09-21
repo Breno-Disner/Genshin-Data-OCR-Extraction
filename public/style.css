@@ -125,10 +125,6 @@ main>div {
     width: 90vw;
     top: 15%;
     right: 5%;
-    background-image: url(Assets/icons/transparent-upload-icon-free-png.webp);
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: 50%;
 }
 #drop-zone {
   position: relative;

@@ -66,7 +66,7 @@ async function readArtifact(image, worker) {
 
     // Load your existing inventory JSON as a set-name catalog.
     const catalog = JSON.parse(
-      await readFile(path.join(__dirname, '../../data.json'), 'utf8')
+      await readFile(path.join(__dirname, '../../public/data.json'), 'utf8')
     );
 
     const knownSets = new Set(
@@ -224,10 +224,10 @@ async function main() {
     await worker.terminate();
   }
   const catalog = JSON.parse(
-    await readFile(path.join(__dirname, '../../data.json'), 'utf8')
+    await readFile(path.join(__dirname, '../../public/data.json'), 'utf8')
   );
 
-  const outputPath = path.join(__dirname, '../../data.json');
+  const outputPath = path.join(__dirname, '../../public/data.json');
 
   const summary = await saveInventory(batch, catalog, outputPath);
   

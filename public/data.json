@@ -114,7 +114,21 @@
     "song-of-days-past": {},
     "tenacity-of-the-millelith": {},
     "the-exile": {},
-    "thundering-fury": {},
+    "thundering-fury": {
+      "1": {
+        "slot": "flower",
+        "level": 16,
+        "mainstat": {
+          "hp": 3571
+        },
+        "substats": {
+          "atk%": 4.2,
+          "energy-recharge%": 5.2,
+          "hp%": 12.6,
+          "atk": 11
+        }
+      }
+    },
     "thundersoother": {},
     "tiny-miracle": {},
     "unfinished-reverie": {},
