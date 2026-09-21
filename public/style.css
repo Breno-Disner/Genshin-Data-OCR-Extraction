@@ -781,3 +781,11 @@ button:disabled {
     width:100%
   }
 }
+
+/* Removal controls are separate from the artifact card to avoid accidental actions. */
+.removal-actions { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; }
+.removal-actions p { font-size: 12px; line-height: 1.6; color: var(--muted); }
+.danger-button, .secondary-button { padding: 10px 14px; border-radius: 7px; font-size: 12px; cursor: pointer; }
+.danger-button { background: #43272d; color: #ffb9b9; border: 1px solid #82505a; }
+.secondary-button { background: var(--surface); color: var(--text); margin-left: 8px; }
+#remove-status { color: #ffb9b9; }

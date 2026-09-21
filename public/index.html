@@ -55,7 +55,17 @@
     </section>
   </main>
   <!-- DETAIL DIALOG: script.js inserts the selected card here. Native dialogs support Escape. -->
-  <dialog id="detail" aria-labelledby="detail-title"><div class="dialog-top"><p class="eyebrow">ARTIFACT DETAILS</p><button id="close-detail" class="close" aria-label="Close details">×</button></div><h2 id="detail-title"></h2><div id="detail-content"></div><p class="detail-note">Saved artifact · Read from your screenshots</p></dialog>
+  <dialog id="detail" aria-labelledby="detail-title"><div class="dialog-top"><p class="eyebrow">ARTIFACT DETAILS</p><button id="close-detail" class="close" aria-label="Close details">×</button></div><h2 id="detail-title"></h2><div id="detail-content"></div><!-- Two-step removal prevents an accidental click from changing inventory. -->
+    <div class="removal-actions">
+      <button id="remove-artifact" class="danger-button" type="button">Remove artifact</button>
+      <div id="remove-confirmation" hidden>
+        <p>Remove this artifact from your collection? This does not change your Genshin account. Matching saved screenshots will not add it back.</p>
+        <button id="confirm-remove" class="danger-button" type="button">Yes, remove</button>
+        <button id="cancel-remove" class="secondary-button" type="button">Keep artifact</button>
+      </div>
+      <p id="remove-status" role="status" aria-live="polite"></p>
+    </div>
+    <p class="detail-note">Saved artifact · Read from your screenshots</p></dialog>
   <!-- IMPORT DIALOG: get_images.js owns upload validation, progress and scan actions. -->
   <dialog id="file_selector" aria-labelledby="import-title">
     <div class="dialog-top"><p class="eyebrow">SCREENSHOT READER</p><button id="cancel-file-selection" class="close" aria-label="Close import">×</button></div>

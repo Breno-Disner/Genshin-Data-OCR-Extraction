@@ -3,6 +3,7 @@ const { createWorker, PSM } = require('tesseract.js');
 const sharp = require('sharp');
 const path = require('node:path');
 const { saveInventory } = require('../Writer/inventory-writer.cjs');
+const { scanScreenshots } = require('./scan-cache.cjs');
 
 async function readArtifact(image, worker) {
 
@@ -70,7 +71,7 @@ async function readArtifact(image, worker) {
     );
 
     const knownSets = new Set(
-      Object.values(catalog).flatMap(sets => Object.keys(sets))
+      Object.entries(catalog).filter(([key]) => !key.startsWith('_')).flatMap(([, sets]) => Object.keys(sets))
     );
 
     function normalizeSet(text) {
@@ -200,32 +201,23 @@ async function main() {
     throw new Error('No images found. Upload screenshots first.');
   }
 
-  const worker = await createWorker('eng');
-  const batch = [];
-
-  try {
-    for (const [index, filename] of files.entries()) {
-      console.log(`Reading ${index + 1}/${files.length}: ${filename}`);
-
-      try {
-        const image = await readFile(path.join(folder, filename));
-        const artifact = await readArtifact(image, worker);
-
-        batch.push({ filename, artifact });
-        console.dir({ filename, artifact }, { depth: null });
-      } catch (error) {
-        const message = error.message ?? String(error);
-
-        batch.push({ filename, error: message });
-        console.error(`Failed to read ${filename}:`, message);
-      }
-    }
-  } finally {
-    await worker.terminate();
-  }
   const catalog = JSON.parse(
     await readFile(path.join(__dirname, '../../public/data.json'), 'utf8')
   );
+  let worker;
+  let batch;
+
+  try {
+    const result = await scanScreenshots(folder, files, catalog._scanCache, async image => {
+      // A fully cached scan never starts the OCR engine.
+      worker ??= await createWorker('eng');
+      return readArtifact(image, worker);
+    });
+    batch = result.batch;
+    console.log(`Reused ${result.reused}/${files.length} saved screenshot results.`);
+  } finally {
+    if (worker) await worker.terminate();
+  }
 
   const outputPath = path.join(__dirname, '../../public/data.json');
 

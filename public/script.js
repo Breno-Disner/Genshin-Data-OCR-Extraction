@@ -123,7 +123,13 @@ function resetFilters() {
 }
 
 /** Populate the native dialog before opening it. Escape closes it by default. */
+let selectedArtifact = null;
+let removingArtifact = false;
 function openDetails(a) {
+  selectedArtifact = a;
+  $('remove-confirmation').hidden = true;
+  $('remove-artifact').hidden = false;
+  $('remove-status').textContent = '';
   $('detail-title').textContent = a.set;
   $('detail-content').innerHTML = `<div class="artifact-card">${cardContents(a)}</div>`;
   $('detail-content').querySelector('img').addEventListener('error', event => event.currentTarget.remove());
@@ -203,3 +209,44 @@ async function refreshInventory() {
 // unhandled-promise error for startup/Retry; the scan caller handles its own.
 $('retry-inventory').addEventListener('click', () => refreshInventory().catch(() => {}));
 refreshInventory().catch(() => {});
+
+// Removal is a server operation so it survives refreshes and future OCR scans.
+$('remove-artifact').addEventListener('click', () => {
+  $('remove-confirmation').hidden = false;
+  $('remove-artifact').hidden = true;
+  $('cancel-remove').focus();
+});
+$('cancel-remove').addEventListener('click', () => {
+  $('remove-confirmation').hidden = true;
+  $('remove-artifact').hidden = false;
+  $('remove-artifact').focus();
+});
+// Keep the dialog stable while its save is in progress.
+$('detail').addEventListener('cancel', event => { if (removingArtifact) event.preventDefault(); });
+$('confirm-remove').addEventListener('click', async () => {
+  if (!selectedArtifact || removingArtifact) return;
+  removingArtifact = true;
+  for (const id of ['confirm-remove', 'cancel-remove', 'close-detail']) $(id).disabled = true;
+  $('remove-status').textContent = 'Removing artifact…';
+  try {
+    const response = await fetch('/api/artifacts', {
+      method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+      // Send the displayed snapshot too; the server rejects stale selections.
+      body: JSON.stringify({ id: selectedArtifact.id, expected: selectedArtifact })
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'Could not remove the artifact.');
+    // Update immediately once saved, even if the subsequent fetch fails.
+    artifacts = artifacts.filter(a => a.id !== selectedArtifact.id);
+    render();
+    $('detail').close();
+    $('image_trigger').focus();
+    await refreshInventory();
+  } catch (error) {
+    $('remove-status').textContent = error.message;
+    // refreshInventory also displays its own error outside the closed dialog.
+  } finally {
+    removingArtifact = false;
+    for (const id of ['confirm-remove', 'cancel-remove', 'close-detail']) $(id).disabled = false;
+  }
+});

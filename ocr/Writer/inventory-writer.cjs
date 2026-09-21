@@ -1,4 +1,5 @@
-const { writeFile } = require('node:fs/promises');
+const { signature, saveAtomically } = require('./removals.cjs');
+const { CACHE_VERSION } = require('../Reader/scan-cache.cjs');
 
 const rarityKeys = {
     1: 'one-star',
@@ -11,7 +12,7 @@ const rarityKeys = {
 async function saveInventory(batch, catalog, outputPath) {
     // Preserve the catalog structure, without copying old artifacts.
     const inventory = Object.fromEntries(
-        Object.entries(catalog).map(([rarity, sets]) => [
+        Object.entries(catalog).filter(([key]) => Object.values(rarityKeys).includes(key)).map(([rarity, sets]) => [
             rarity,
             Object.fromEntries(
                 Object.keys(sets).map(setName => [setName, {}])
@@ -19,10 +20,16 @@ async function saveInventory(batch, catalog, outputPath) {
         ])
     );
 
+    // Preserve removal records while rebuilding artifact buckets from screenshots.
+    // Copy the counts before consuming them, so the saved records remain intact.
+    inventory._removedArtifacts = { ...(catalog._removedArtifacts || {}) };
+    inventory._scanCache = { version: CACHE_VERSION, entries: {} };
+    const remainingRemovals = { ...inventory._removedArtifacts };
+    let removed = 0;
     const skipped = [];
     let saved = 0;
 
-    for (const { filename, artifact, error } of batch) {
+    for (const { filename, hash: screenshotHash, artifact, error } of batch) {
         if (error || !artifact) {
             skipped.push({ filename, reason: error ?? 'No artifact result' });
             continue;
@@ -53,6 +60,16 @@ async function saveInventory(batch, catalog, outputPath) {
             continue;
         }
 
+        // Cache only validated results, including intentionally removed artifacts.
+        // Inventory and cache are committed together, so failed scans cannot
+        // mark an unsaved result as complete.
+        if (screenshotHash) inventory._scanCache.entries[screenshotHash] = artifact;
+        const hash = signature(rarity, artifact.set, artifact);
+        if (remainingRemovals[hash] > 0) {
+            remainingRemovals[hash]--;
+            removed++;
+            continue; // Intentional removal is not an OCR validation failure.
+        }
         const items = inventory[rarity][artifact.set];
         const id = String(Object.keys(items).length + 1);
 
@@ -60,19 +77,16 @@ async function saveInventory(batch, catalog, outputPath) {
             slot: artifact.slot,
             level: artifact.level,
             mainstat: artifact.mainstat,
-            substats: artifact.substats
+            substats: artifact.substats,
+            ...(screenshotHash ? { screenshot: { filename, hash: screenshotHash } } : {})
         };
 
         saved++;
     }
-    if (saved === 0 || skipped.length > 0) {
+    if ((saved === 0 && removed === 0) || skipped.length > 0) {
         return { saved: 0, skipped, written: false };
     }
-    await writeFile(
-        outputPath,
-        JSON.stringify(inventory, null, 2) + '\n',
-        'utf8'
-    );
+    await saveAtomically(outputPath, inventory);
 
     return { saved, skipped, written: true };
 }

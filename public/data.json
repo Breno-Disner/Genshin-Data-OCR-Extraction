@@ -27,19 +27,10 @@
           "crit-rate%": 10.9,
           "energy-recharge%": 9.7,
           "atk%": 8.7
-        }
-      },
-      "2": {
-        "slot": "circlet",
-        "level": 20,
-        "mainstat": {
-          "crit-dmg%": 62.2
         },
-        "substats": {
-          "hp%": 4.7,
-          "crit-rate%": 10.9,
-          "energy-recharge%": 9.7,
-          "atk%": 8.7
+        "screenshot": {
+          "filename": "93c2b09a326abf5bb174ed7dba962c16214fa07304d71a7d61ee860e32fa3c16.png",
+          "hash": "93c2b09a326abf5bb174ed7dba962c16214fa07304d71a7d61ee860e32fa3c16"
         }
       }
     },
@@ -66,6 +57,10 @@
           "crit-rate%": 6.6,
           "elemental-mastery": 72,
           "hp%": 5.8
+        },
+        "screenshot": {
+          "filename": "430047b8-de16-4df6-a192-bde0f3ec0f56-7dd514dd5c7da3aadc840e7386eabc77e77aaba382a75d5e95dd15be8b6bd897.png",
+          "hash": "7dd514dd5c7da3aadc840e7386eabc77e77aaba382a75d5e95dd15be8b6bd897"
         }
       }
     },
@@ -96,6 +91,27 @@
           "hp": 418,
           "crit-dmg%": 12.4,
           "crit-rate%": 3.1
+        },
+        "screenshot": {
+          "filename": "16a55a4f20ae36d87a14d7ea291e4e355fc17264f22b191e65f3c5b45ccf5723.png",
+          "hash": "16a55a4f20ae36d87a14d7ea291e4e355fc17264f22b191e65f3c5b45ccf5723"
+        }
+      },
+      "2": {
+        "slot": "goblet",
+        "level": 20,
+        "mainstat": {
+          "dendro-dmg%": 46.6
+        },
+        "substats": {
+          "elemental-mastery": 65,
+          "hp": 418,
+          "crit-dmg%": 12.4,
+          "crit-rate%": 3.1
+        },
+        "screenshot": {
+          "filename": "5916be33f713cf4d776d2070016fb57439efcf6f91cef311d11d19f371e74cbb.png",
+          "hash": "5916be33f713cf4d776d2070016fb57439efcf6f91cef311d11d19f371e74cbb"
         }
       }
     },
@@ -111,6 +127,10 @@
           "hp": 209,
           "crit-dmg%": 6.2,
           "def": 42
+        },
+        "screenshot": {
+          "filename": "5cc669dbe31550e7153ff228f4428ce6b21562ed27a98a87e0d9a20dfcd46558.png",
+          "hash": "5cc669dbe31550e7153ff228f4428ce6b21562ed27a98a87e0d9a20dfcd46558"
         }
       }
     }
@@ -180,6 +200,10 @@
           "energy-recharge%": 5.2,
           "hp%": 12.6,
           "atk": 11
+        },
+        "screenshot": {
+          "filename": "16056049790c0b6bda1e1a2bfc1d4a8d82ff0e243ed7d4a556e9da5de161bc44.png",
+          "hash": "16056049790c0b6bda1e1a2bfc1d4a8d82ff0e243ed7d4a556e9da5de161bc44"
         }
       },
       "2": {
@@ -193,6 +217,10 @@
           "hp": 239,
           "crit-dmg%": 5,
           "def%": 4.1
+        },
+        "screenshot": {
+          "filename": "28e97d9c1479eb64eefb632d56c674983416d894f9b8d50bc260639008bbf06d.png",
+          "hash": "28e97d9c1479eb64eefb632d56c674983416d894f9b8d50bc260639008bbf06d"
         }
       }
     },
@@ -233,5 +261,182 @@
     "adventurer": {},
     "lucky-dog": {},
     "traveling-doctor": {}
+  },
+  "_removedArtifacts": {
+    "f0c9c249171a441335b6104e0df9743549e0d7aae6d1fcf212248a6065d4453d": 1
+  },
+  "_scanCache": {
+    "version": 1,
+    "entries": {
+      "1199102ae371009f0dd7ca5e849c5618f87eb0a0f96d0e9f9ff814414ad1ffba": {
+        "mainstatName": "CRIT DMG 4",
+        "mainstatValue": "62.2%",
+        "substats": {
+          "hp%": 4.7,
+          "crit-rate%": 10.9,
+          "energy-recharge%": 9.7,
+          "atk%": 8.7
+        },
+        "level": 20,
+        "name": "Shadow of the Sand King",
+        "rarity": 5,
+        "slot": "circlet",
+        "set": "gilded-dreams",
+        "rawSubstats": "+ HP+4.7%\n\n+ CRIT Rate+10.9%\n\n+ Energy Recharge+9.7%\n- ATK+8.7%",
+        "unparsedSubstats": [],
+        "mainstat": {
+          "crit-dmg%": 62.2
+        },
+        "rawLevel": "+20"
+      },
+      "16056049790c0b6bda1e1a2bfc1d4a8d82ff0e243ed7d4a556e9da5de161bc44": {
+        "mainstatName": "HP on",
+        "mainstatValue": "3,571",
+        "substats": {
+          "atk%": 4.2,
+          "energy-recharge%": 5.2,
+          "hp%": 12.6,
+          "atk": 11
+        },
+        "level": 16,
+        "name": "Thunderbird's Mercy",
+        "rarity": 4,
+        "slot": "flower",
+        "set": "thundering-fury",
+        "rawSubstats": "+ ATK+4.2%\n\n+ Energy Recharge+5.2%\n+ HP+12.6%\n\n+ ATK+11",
+        "unparsedSubstats": [],
+        "mainstat": {
+          "hp": 3571
+        },
+        "rawLevel": "+16"
+      },
+      "16a55a4f20ae36d87a14d7ea291e4e355fc17264f22b191e65f3c5b45ccf5723": {
+        "mainstatName": "Dendro DMG Bonus 5",
+        "mainstatValue": "46.6%",
+        "substats": {
+          "elemental-mastery": 65,
+          "hp": 418,
+          "crit-dmg%": 12.4,
+          "crit-rate%": 3.1
+        },
+        "level": 20,
+        "name": "Viridescent Venerer's Vessel",
+        "rarity": 5,
+        "slot": "goblet",
+        "set": "viridescent-venerer",
+        "rawSubstats": "+ Elemental Mastery+65\n+ HP+418\n\n+ CRIT DMG+12.4%\n\n« CRIT Rate+3.1%",
+        "unparsedSubstats": [],
+        "mainstat": {
+          "dendro-dmg%": 46.6
+        },
+        "rawLevel": "+20"
+      },
+      "28e97d9c1479eb64eefb632d56c674983416d894f9b8d50bc260639008bbf06d": {
+        "mainstatName": "ATK 2",
+        "mainstatValue": "137",
+        "substats": {
+          "hp%": 4.7,
+          "hp": 239,
+          "crit-dmg%": 5,
+          "def%": 4.1
+        },
+        "level": 8,
+        "name": "Survivor of Catastrophe",
+        "rarity": 4,
+        "slot": "plume",
+        "set": "thundering-fury",
+        "rawSubstats": "+ HP+4.7%\n\n« HP+239\n\n+ CRIT DMG+5.0%\n« DEF+4.1%",
+        "unparsedSubstats": [],
+        "mainstat": {
+          "atk": 137
+        },
+        "rawLevel": "+8"
+      },
+      "7dd514dd5c7da3aadc840e7386eabc77e77aaba382a75d5e95dd15be8b6bd897": {
+        "mainstatName": "Cryo DMG Bonus",
+        "mainstatValue": "46.6%",
+        "substats": {
+          "energy-recharge%": 5.2,
+          "crit-rate%": 6.6,
+          "elemental-mastery": 72,
+          "hp%": 5.8
+        },
+        "level": 20,
+        "name": "Royal Silver Urn",
+        "rarity": 5,
+        "slot": "goblet",
+        "set": "noblesse-oblige",
+        "rawSubstats": "+ Energy Recharge+5.2%\n+ CRIT Rate+6.6%\n\n+ Elemental Mastery+72\n+ HP+5.8%",
+        "unparsedSubstats": [],
+        "mainstat": {
+          "cryo-dmg%": 46.6
+        },
+        "rawLevel": "+20"
+      },
+      "5916be33f713cf4d776d2070016fb57439efcf6f91cef311d11d19f371e74cbb": {
+        "mainstatName": "Dendro DMG Bonus 5",
+        "mainstatValue": "46.6%",
+        "substats": {
+          "elemental-mastery": 65,
+          "hp": 418,
+          "crit-dmg%": 12.4,
+          "crit-rate%": 3.1
+        },
+        "level": 20,
+        "name": "Viridescent Venerer's Vessel",
+        "rarity": 5,
+        "slot": "goblet",
+        "set": "viridescent-venerer",
+        "rawSubstats": "+ Elemental Mastery+65\n+ HP+418\n\n+ CRIT DMG+12.4%\n\n« CRIT Rate+3.1%",
+        "unparsedSubstats": [],
+        "mainstat": {
+          "dendro-dmg%": 46.6
+        },
+        "rawLevel": "+20"
+      },
+      "5cc669dbe31550e7153ff228f4428ce6b21562ed27a98a87e0d9a20dfcd46558": {
+        "mainstatName": "ATK",
+        "mainstatValue": "22.8%",
+        "substats": {
+          "hp": 209,
+          "crit-dmg%": 6.2,
+          "def": 42
+        },
+        "level": 8,
+        "name": "Concert's Final Hour",
+        "rarity": 5,
+        "slot": "sands",
+        "set": "wanderers-troupe",
+        "rawSubstats": "+ HP+209\n\n+ Elemental Mastery+21]\n+ CRIT DMG+6.2%\n\n- DEF+42",
+        "unparsedSubstats": [
+          "+ Elemental Mastery+21]"
+        ],
+        "mainstat": {
+          "atk%": 22.8
+        },
+        "rawLevel": "+8"
+      },
+      "93c2b09a326abf5bb174ed7dba962c16214fa07304d71a7d61ee860e32fa3c16": {
+        "mainstatName": "CRIT DMG 4",
+        "mainstatValue": "62.2%",
+        "substats": {
+          "hp%": 4.7,
+          "crit-rate%": 10.9,
+          "energy-recharge%": 9.7,
+          "atk%": 8.7
+        },
+        "level": 20,
+        "name": "Shadow of the Sand King",
+        "rarity": 5,
+        "slot": "circlet",
+        "set": "gilded-dreams",
+        "rawSubstats": "+ HP+4.7%\n\n+ CRIT Rate+10.9%\n\n+ Energy Recharge+9.7%\n- ATK+8.7%",
+        "unparsedSubstats": [],
+        "mainstat": {
+          "crit-dmg%": 62.2
+        },
+        "rawLevel": "+20"
+      }
+    }
   }
 }

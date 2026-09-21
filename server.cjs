@@ -6,13 +6,18 @@ const { mkdir, writeFile } = require('node:fs/promises');
 const { createHash } = require('node:crypto');
 const { spawn } = require('node:child_process');
 
+const { removeArtifact } = require('./ocr/Writer/removals.cjs');
+const { normalize } = require('./public/src/inventory.js');
 const app = express();
+app.use(express.json({ limit: '32kb' }));
 
 const publicFolder = path.join(__dirname, 'public');
 const imageFolder = path.join(__dirname, 'ocr', 'Reader', 'images');
 const readerFile = path.join(__dirname, 'ocr', 'Reader', 'test.cjs');
 
 let scanRunning = false;
+// Shared lock: removal and OCR must not overwrite each other’s inventory changes.
+let removalRunning = false;
 
 // Request logging.
 app.use((req, res, next) => {
@@ -104,11 +109,28 @@ app.post('/api/images', upload.single('image'), async (req, res, next) => {
   }
 });
 
+// Only this endpoint changes removal state; GET requests never mutate inventory.
+app.delete('/api/artifacts', async (req, res, next) => {
+  if (scanRunning || removalRunning) {
+    return res.status(409).json({ error: 'An inventory update is running. Wait for it to finish.' });
+  }
+  removalRunning = true;
+  try {
+    await removeArtifact(path.join(publicFolder, 'data.json'), req.body?.id, req.body?.expected, normalize);
+    return res.json({ message: 'Artifact removed.' });
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    next(error);
+  } finally {
+    removalRunning = false;
+  }
+});
+
 // Run the OCR reader.
 app.post('/api/scan', (req, res) => {
-  if (scanRunning) {
+  if (scanRunning || removalRunning) {
     return res.status(409).json({
-      error: 'A scan is already running.'
+      error: 'An inventory update is already running.'
     });
   }
 
