@@ -15,7 +15,34 @@
     "finale-of-the-deep-galleries": {},
     "flower-of-paradise-lost": {},
     "fragment-of-harmonic-whimsy": {},
-    "gilded-dreams": {},
+    "gilded-dreams": {
+      "1": {
+        "slot": "circlet",
+        "level": 20,
+        "mainstat": {
+          "crit-dmg%": 62.2
+        },
+        "substats": {
+          "hp%": 4.7,
+          "crit-rate%": 10.9,
+          "energy-recharge%": 9.7,
+          "atk%": 8.7
+        }
+      },
+      "2": {
+        "slot": "circlet",
+        "level": 20,
+        "mainstat": {
+          "crit-dmg%": 62.2
+        },
+        "substats": {
+          "hp%": 4.7,
+          "crit-rate%": 10.9,
+          "energy-recharge%": 9.7,
+          "atk%": 8.7
+        }
+      }
+    },
     "gladiators-finale": {},
     "golden-troupe": {},
     "heart-of-depth": {},
@@ -57,9 +84,36 @@
     "thundersoother": {},
     "unfinished-reverie": {},
     "vermillion-hereafter": {},
-    "viridescent-venerer": {},
+    "viridescent-venerer": {
+      "1": {
+        "slot": "goblet",
+        "level": 20,
+        "mainstat": {
+          "dendro-dmg%": 46.6
+        },
+        "substats": {
+          "elemental-mastery": 65,
+          "hp": 418,
+          "crit-dmg%": 12.4,
+          "crit-rate%": 3.1
+        }
+      }
+    },
     "vourukashas-glow": {},
-    "wanderers-troupe": {}
+    "wanderers-troupe": {
+      "1": {
+        "slot": "sands",
+        "level": 8,
+        "mainstat": {
+          "atk%": 22.8
+        },
+        "substats": {
+          "hp": 209,
+          "crit-dmg%": 6.2,
+          "def": 42
+        }
+      }
+    }
   },
   "four-stars": {
     "a-day-carved-from-rising-winds": {},
@@ -126,6 +180,19 @@
           "energy-recharge%": 5.2,
           "hp%": 12.6,
           "atk": 11
+        }
+      },
+      "2": {
+        "slot": "plume",
+        "level": 8,
+        "mainstat": {
+          "atk": 137
+        },
+        "substats": {
+          "hp%": 4.7,
+          "hp": 239,
+          "crit-dmg%": 5,
+          "def%": 4.1
         }
       }
     },

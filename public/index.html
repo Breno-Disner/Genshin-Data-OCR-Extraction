@@ -1,36 +1,76 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genshin Live Reader</title>
-    <link rel="stylesheet" href="style.css">
+<!-- PAGE SHELL: CSS controls appearance; the scripts at the bottom add behavior. -->
+  <head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Genshin Live Reader · Collection</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <nav>
-        <div id="send_images"><button id="image_trigger">Send Images</button></div>
-        <div id="sets">
-            <button id="setheader" type="button">ALL Sets</button>
+  <!-- SIDEBAR: the total count is filled by render() in script.js. -->
+  <aside class="sidebar">
+    <a class="brand" href="./index.html"><span class="brand-mark">✦</span><span>GENSHIN<small>LIVE READER</small></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <nav aria-label="Main navigation"><a class="nav-item active" href="./index.html" aria-current="page"><span>▦</span> Collection <span class="nav-count">0</span></a></nav>
+    <div class="sidebar-bottom"><span class="status-dot"></span> Screenshot reader<small>LOCAL ARTIFACT COLLECTION</small></div>
+  </aside>
+  <main>
+    <!-- HEADER: image_trigger opens the import dialog; no upload occurs on this click. -->
+  <header class="page-header"><div><p class="eyebrow">YOUR INVENTORY, AT A GLANCE</p><h1>Artifact collection</h1><p class="subtitle">Inspect your artifacts. Find your next upgrade.</p></div><button class="primary-button" id="image_trigger" type="button">＋ Import screenshots</button></header>
 
-            <div id="setbody" class="hide-scrollbar">
-                <button type="button" data-set="all">All Sets</button>
-            </div>
-        </div>
-    </nav>
-    <main></main>
-    <div id="file_selector">
-        <label id="drop-zone"><input type="file" id="file-input" multiple accept="image/*"
-                aria-label="Select artifact screenshots" /></label>
-        <div id="scan-controls">
-            <button type="button" id="scan-images">Scan images</button>
-            <p id="scan-status" role="status" aria-live="polite"></p>
-        </div>
-        <button type="button" id="cancel-file-selection">CANCEL</button>
+    <!-- FILTERS: IDs are shared with script.js. Empty select values mean all artifacts.
+       Set options are populated from the loaded inventory. -->
+  <form class="filters" id="filters" role="search" aria-label="Filter artifacts">
+      <label>SET<select id="set"><option value="">All artifact sets</option></select>
+</label>
+      <label>RARITY<select id="rarity"><option value="">All rarities</option>
+        <option value="5">5 stars</option>
+        <option value="4">4 stars</option>
+        <option value="3">3 stars</option>
+        <option value="2">2 stars</option>
+        <option value="1">1 star</option></select>
+</label>
+      <label>SLOT<select id="slot"><option value="">All slots</option>
+        <option>Flower</option>
+        <option>Plume</option>
+        <option>Sands</option>
+        <option>Goblet</option>
+        <option>Circlet</option></select>
+</label>
+      <label>SEARCH<span class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search artifacts or stats…" autocomplete="off"><kbd>/</kbd></span></label>
+    </form>
+    <!-- COLLECTION: controls are outside the filters form, so Clear filters preserves sort/density. -->
+  <section aria-label="Artifact collection"><div class="toolbar"><div><strong id="count" aria-live="polite">Loading inventory…</strong><button class="reset" id="reset" hidden>Clear filters</button></div>
+      <div class="view-controls"><div class="segmented" aria-label="Card density"><button aria-pressed="true" data-density="compact">Compact</button><button aria-pressed="false" data-density="comfortable">Comfortable</button></div><label class="sort-label"><span class="sr-only">Sort artifacts</span><select id="sort"><option value="recent">Inventory order</option>
+        <option value="level">Highest level</option>
+        <option value="set">Artifact set</option></select>
+</label></div>
     </div>
+      <!-- LOAD ERRORS: separate from an empty collection. Retry calls refreshInventory(). -->
+  <div id="inventory-error" class="error-panel" role="alert" hidden><p id="inventory-error-message"></p><button id="retry-inventory" type="button">Retry loading</button></div>
+      <div class="artifact-grid" id="grid"></div>
+      <!-- EMPTY STATE: script.js distinguishes no saved artifacts from no filter matches. -->
+  <div class="empty" id="empty" hidden><span>◇</span><h2>No matching artifacts</h2><p>Try another set, slot, or search term.</p><button id="empty-reset">Clear filters</button></div>
+      <footer><span id="results">Loading saved artifacts…</span><span>Saved inventory <span class="footer-dot">·</span> Local reader</span></footer>
+    </section>
+  </main>
+  <!-- DETAIL DIALOG: script.js inserts the selected card here. Native dialogs support Escape. -->
+  <dialog id="detail" aria-labelledby="detail-title"><div class="dialog-top"><p class="eyebrow">ARTIFACT DETAILS</p><button id="close-detail" class="close" aria-label="Close details">×</button></div><h2 id="detail-title"></h2><div id="detail-content"></div><p class="detail-note">Saved artifact · Read from your screenshots</p></dialog>
+  <!-- IMPORT DIALOG: get_images.js owns upload validation, progress and scan actions. -->
+  <dialog id="file_selector" aria-labelledby="import-title">
+    <div class="dialog-top"><p class="eyebrow">SCREENSHOT READER</p><button id="cancel-file-selection" class="close" aria-label="Close import">×</button></div>
+    <h2 id="import-title">Import your artifacts</h2>
+    <p class="import-description">Upload inventory screenshots, then scan them to update your collection.</p>
+    <!-- The transparent file input covers this label; it supports both clicking and dropping files. -->
+  <label id="drop-zone"><span class="upload-symbol" aria-hidden="true">↑</span><strong>Drop screenshots here</strong><span>or click to choose files</span><small>1920 × 1080 · PNG, JPEG or WebP · Up to 15 MB each</small><input type="file" id="file-input" multiple accept="image/png,image/jpeg,image/webp" aria-label="Select artifact screenshots"></label>
+    <p id="upload-status" class="operation-status" role="status" aria-live="polite">Screenshots are saved locally. Previously uploaded images can also be scanned.</p>
+    <div id="scan-controls"><button class="primary-button" type="button" id="scan-images">Scan saved screenshots</button><p id="scan-status" class="operation-status" role="status" aria-live="polite"></p></div>
+  </dialog>
+  <!-- SCRIPT ORDER MATTERS. inventory.js exposes Inventory.normalize; script.js uses it
+       and exposes refreshInventory; get_images.js calls that after scanning.
+       Scripts are after the markup so their target elements already exist. -->
+  <script src="src/inventory.js"></script>
+  <script src="script.js"></script>
+  <script src="src/get_images.js"></script>
 </body>
-<script src="script.js" defer></script>
-<script src="src/get_images.js" defer></script>
-
 </html>
